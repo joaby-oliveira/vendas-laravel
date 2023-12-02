@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSalesmanRequest;
-use App\Http\Requests\UpdateSalesmanRequest;
+use App\Http\Requests\Salesman\StoreSalesmanRequest;
+use App\Http\Requests\Salesman\UpdateSalesmanRequest;
 use App\Http\Resources\SalesmanResource;
 use App\Models\Salesman;
 use Illuminate\Http\Response;

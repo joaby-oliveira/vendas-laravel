@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Salesman;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class UpdateSalesmanRequest extends FormRequest
+class StoreSalesmanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +27,10 @@ class UpdateSalesmanRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('salesman')->ignore($this->id),
+                'unique:salesman,email'
             ],
             'password' => [
-                'nullable',
+                'required',
                 'min:6',
                 'max:100'
             ]
