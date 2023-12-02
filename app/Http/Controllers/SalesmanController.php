@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSalesmanRequest;
 use App\Http\Requests\UpdateSalesmanRequest;
 use App\Http\Resources\SalesmanResource;
 use App\Models\Salesman;
+use Illuminate\Http\Response;
 use Throwable;
 
 class SalesmanController extends Controller
@@ -68,7 +69,18 @@ class SalesmanController extends Controller
         }
     }
 
-    public function destroy(Salesman $salesman)
+    public function destroy(string $id)
     {
+        try {
+            $salesman = Salesman::findOrFail($id);
+
+            $salesman->delete();
+
+            return response()->json([], Response::HTTP_NO_CONTENT);
+        } catch (Throwable $error) {
+            return response()->json([
+                "message" => "Informe um vendedor existente"
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }
