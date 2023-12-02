@@ -6,32 +6,54 @@ use App\Http\Requests\StoreSalesmanRequest;
 use App\Http\Requests\UpdateSalesmanRequest;
 use App\Http\Resources\SalesmanResource;
 use App\Models\Salesman;
+use Throwable;
 
 class SalesmanController extends Controller
 {
     public function index()
     {
-        $salesmen = Salesman::all();
+        try {
+            $salesmen = Salesman::all();
 
-        return SalesmanResource::collection($salesmen);
+            return SalesmanResource::collection($salesmen);
+        } catch (Throwable $error) {
+            return response()->json([
+                "message" => "Não foi possível obter a lista de vendedores"
+            ], 500);
+        }
     }
 
     public function store(StoreSalesmanRequest $request)
     {
-        $data = $request->validated();
-        $data['password'] = bcrypt($request->password);
+        try {
+            $data = $request->validated();
+            $data['password'] = bcrypt($request->password);
 
-        $salesman = Salesman::create($data);
+            $salesman = Salesman::create($data);
 
-        return new SalesmanResource($salesman);
+            return new SalesmanResource($salesman);
+        } catch (Throwable $error) {
+            return response()->json([
+                "message" => "Não foi possível criar o vendedor"
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Salesman $salesman)
+    public function show(string $id)
     {
-        //
+        try {
+            $salesman = Salesman::findOrFail($id);
+
+            return new SalesmanResource($salesman);
+        } catch (Throwable $error) {
+            dd($error);
+            return response()->json([
+                "message" => "Nenhum vendedor encontrado"
+            ], 404);
+        }
     }
 
     /**
