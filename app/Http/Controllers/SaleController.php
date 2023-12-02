@@ -2,34 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSaleRequest;
-use App\Http\Requests\UpdateSaleRequest;
+use App\Http\Requests\Sale\StoreSaleRequest;
+use App\Http\Requests\Sale\UpdateSaleRequest;
+use App\Http\Resources\SaleResource;
 use App\Models\Sale;
+use Throwable;
 
 class SaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        try {
+            $sales = Sale::paginate();
+            return new SaleResource($sales);
+        } catch (Throwable $error) {
+            response()->json([
+                "message" => "Não foi possível obter a lista de vendas"
+            ]);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreSaleRequest $request)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            return new SaleResource($data);
+        } catch (Throwable $error) {
+            response()->json([
+                "message" => "Não foi possível registrar a venda"
+            ]);
+        }
     }
 
     /**
@@ -37,7 +41,6 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-        //
     }
 
     /**
