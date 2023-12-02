@@ -6,6 +6,7 @@ use App\Http\Requests\Sale\StoreSaleRequest;
 use App\Http\Requests\Sale\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
+use App\Models\Salesman;
 use Throwable;
 
 class SaleController extends Controller
@@ -28,8 +29,13 @@ class SaleController extends Controller
         try {
             $data = $request->validated();
 
-            return new SaleResource($data);
+            $salesman = Salesman::findOrFail($data["id_salesman"]);
+
+            $sales = $salesman->sale()->all();
+
+            return new SaleResource($sales);
         } catch (Throwable $error) {
+            dd($error);
             response()->json([
                 "message" => "Não foi possível registrar a venda"
             ]);

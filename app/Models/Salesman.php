@@ -12,11 +12,16 @@ class Salesman extends Model
     use HasUuids;
 
     protected $table = 'salesman';
-    protected $primarykey = 'uuid';
+    protected $primarykey = 'id';
 
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
+
+    public function sale()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }
