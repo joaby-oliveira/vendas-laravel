@@ -9,9 +9,6 @@ use App\Models\Salesman;
 
 class SalesmanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $salesmen = Salesman::all();
@@ -19,20 +16,14 @@ class SalesmanController extends Controller
         return SalesmanResource::collection($salesmen);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreSalesmanRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['password'] = bcrypt($request->password);
+
+        $salesman = Salesman::create($data);
+
+        return new SalesmanResource($salesman);
     }
 
     /**

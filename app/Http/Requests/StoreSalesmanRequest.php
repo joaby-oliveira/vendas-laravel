@@ -11,7 +11,7 @@ class StoreSalesmanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,18 @@ class StoreSalesmanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'min:3', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                'unique:salesman,email'
+            ],
+            'password' => [
+                'required',
+                'min:6',
+                'max:100'
+            ]
         ];
     }
 }
