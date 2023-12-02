@@ -20,7 +20,7 @@ class SalesmanController extends Controller
         } catch (Throwable $error) {
             return response()->json([
                 "message" => "Não foi possível obter a lista de vendedores"
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -50,7 +50,7 @@ class SalesmanController extends Controller
             dd($error);
             return response()->json([
                 "message" => "Nenhum vendedor encontrado"
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -65,7 +65,7 @@ class SalesmanController extends Controller
         } catch (Throwable $error) {
             return response()->json([
                 "message" => "Nenhum vendedor encontrado"
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
