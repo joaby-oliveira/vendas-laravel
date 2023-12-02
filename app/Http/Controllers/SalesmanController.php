@@ -57,19 +57,21 @@ class SalesmanController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Salesman $salesman)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSalesmanRequest $request, Salesman $salesman)
+    public function update(UpdateSalesmanRequest $request, string $id)
     {
-        //
+        try {
+            $data = $request->validated();
+            $salesman = Salesman::findOrFail($id);
+            $salesman->update($data);
+
+            return new SalesmanResource($salesman);
+        } catch (Throwable $error) {
+            return response()->json([
+                "message" => "Nenhum vendedor encontrado"
+            ], 404);
+        }
     }
 
     /**

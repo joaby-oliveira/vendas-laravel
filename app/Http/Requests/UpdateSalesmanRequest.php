@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSalesmanRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateSalesmanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,18 @@ class UpdateSalesmanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'min:3', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('salesman')->ignore($this->id),
+            ],
+            'password' => [
+                'nullable',
+                'min:6',
+                'max:100'
+            ]
         ];
     }
 }
