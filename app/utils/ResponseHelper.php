@@ -12,4 +12,9 @@ class ResponseHelper
             'message' => $message,
         ], $statusCode);
     }
+
+    public static function deletedResponse()
+    {
+        return response()->json([], Response::HTTP_NO_CONTENT);
+    }
 }
