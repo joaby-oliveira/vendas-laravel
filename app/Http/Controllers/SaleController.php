@@ -55,33 +55,39 @@ class SaleController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         try {
-            $sale = Sale::findOrFail($id);
+            $sale = Sale::find($id);
+            if (!$sale) {
+                throw new Exception('Venda não encontrada');
+            }
             return new SaleResource($sale);
         } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Nenhuma venda encontrada", Response::HTTP_NOT_FOUND);
+            if ($error->getMessage() == 'Venda não encontrada') {
+                return ResponseHelper::errorResponse("Venda não encontrada", Response::HTTP_NOT_FOUND);
+            }
+            return ResponseHelper::errorResponse("Não foi possível buscar venda, tente novamente mais tarde");
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sale $sale)
+    public function update(UpdateSaleRequest $request, string $id)
     {
-        //
-    }
+        try {
+            $data = $request->validated();
+            $sale = Sale::find($id);
+            if (!$sale) {
+                throw new Exception('Venda não encontrada');
+            }
+            $sale->update($data);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSaleRequest $request, Sale $sale)
-    {
-        //
+            return new SaleResource($sale);
+        } catch (Throwable $error) {
+            if ($error->getMessage() == 'Venda não encontrada') {
+                return ResponseHelper::errorResponse("Venda não encontrada", Response::HTTP_NOT_FOUND);
+            }
+            return ResponseHelper::errorResponse("Não foi possível buscar venda, tente novamente mais tarde");
+        }
     }
 
     /**
