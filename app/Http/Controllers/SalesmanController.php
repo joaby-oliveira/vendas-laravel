@@ -6,6 +6,7 @@ use App\Http\Requests\Salesman\StoreSalesmanRequest;
 use App\Http\Requests\Salesman\UpdateSalesmanRequest;
 use App\Http\Resources\SalesmanResource;
 use App\Models\Salesman;
+use App\Utils\ResponseHelper;
 use Illuminate\Http\Response;
 use Throwable;
 
@@ -15,12 +16,9 @@ class SalesmanController extends Controller
     {
         try {
             $salesmen = Salesman::all();
-
             return SalesmanResource::collection($salesmen);
         } catch (Throwable $error) {
-            return response()->json([
-                "message" => "Não foi possível obter a lista de vendedores"
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return ResponseHelper::errorResponse("Não foi possível obter a lista de vendedores");
         }
     }
 
@@ -34,9 +32,7 @@ class SalesmanController extends Controller
 
             return new SalesmanResource($salesman);
         } catch (Throwable $error) {
-            return response()->json([
-                "message" => "Não foi possível criar o vendedor"
-            ], 500);
+            return ResponseHelper::errorResponse("Não foi possível criar o vendedor");
         }
     }
 
@@ -44,13 +40,9 @@ class SalesmanController extends Controller
     {
         try {
             $salesman = Salesman::findOrFail($id);
-
             return new SalesmanResource($salesman);
         } catch (Throwable $error) {
-            dd($error);
-            return response()->json([
-                "message" => "Nenhum vendedor encontrado"
-            ], Response::HTTP_NOT_FOUND);
+            return ResponseHelper::errorResponse("Nenhum vendedor encontrado", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -63,9 +55,7 @@ class SalesmanController extends Controller
 
             return new SalesmanResource($salesman);
         } catch (Throwable $error) {
-            return response()->json([
-                "message" => "Nenhum vendedor encontrado"
-            ], Response::HTTP_NOT_FOUND);
+            return ResponseHelper::errorResponse("Nenhum vendedor encontrado", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -73,14 +63,11 @@ class SalesmanController extends Controller
     {
         try {
             $salesman = Salesman::findOrFail($id);
-
             $salesman->delete();
 
             return response()->json([], Response::HTTP_NO_CONTENT);
         } catch (Throwable $error) {
-            return response()->json([
-                "message" => "Informe um vendedor existente"
-            ], Response::HTTP_NOT_FOUND);
+            return ResponseHelper::errorResponse("Informe um vendedor existente", Response::HTTP_NOT_FOUND);
         }
     }
 }

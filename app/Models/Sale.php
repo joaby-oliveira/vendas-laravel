@@ -12,7 +12,7 @@ class Sale extends Model
     use HasUuids;
 
 
-    protected $table = 'sales';
+    protected $table = 'sale';
     protected $primarykey = 'id';
 
 
@@ -20,7 +20,7 @@ class Sale extends Model
         'product_name',
         'quantity',
         'price',
-        'id_salesman',
+        'salesman_id',
     ];
 
     public function salesman()

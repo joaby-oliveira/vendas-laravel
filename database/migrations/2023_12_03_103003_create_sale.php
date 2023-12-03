@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('product_name');
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
-            $table->uuid('id_salesman');
             $table->timestamps();
-
-            $table->foreign('id_salesman')->references('id')->on('salesman');
+            $table->foreignUuid('salesman_id');
         });
     }
 

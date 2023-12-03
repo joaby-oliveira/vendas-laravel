@@ -7,7 +7,11 @@ use App\Http\Requests\Sale\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
 use App\Models\Salesman;
+use Exception;
+use Illuminate\Http\Response;
+
 use Throwable;
+use App\Utils\ResponseHelper;
 
 class SaleController extends Controller
 {
@@ -17,9 +21,9 @@ class SaleController extends Controller
             $sales = Sale::paginate();
             return new SaleResource($sales);
         } catch (Throwable $error) {
-            response()->json([
-                "message" => "Não foi possível obter a lista de vendas"
-            ]);
+            return ResponseHelper::errorResponse(
+                'Não foi possível obter a lista de vendas, tente novamente mais tarde'
+            );
         }
     }
 
@@ -29,16 +33,25 @@ class SaleController extends Controller
         try {
             $data = $request->validated();
 
-            $salesman = Salesman::findOrFail($data["id_salesman"]);
+            $salesman = Salesman::find($data["salesman_id"]);
 
-            $sales = $salesman->sale()->all();
+            if (!$salesman) {
+                throw new Exception('Usuário inexistente');
+            }
+
+            $sales = $salesman->sale()->create($data);
 
             return new SaleResource($sales);
         } catch (Throwable $error) {
-            dd($error);
-            response()->json([
-                "message" => "Não foi possível registrar a venda"
-            ]);
+            if ($error->getMessage() == 'Usuário inexistente') {
+                return ResponseHelper::errorResponse(
+                    $error->getMessage(),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+            return ResponseHelper::errorResponse(
+                'Não foi possível registrar a venda, tente novamente mais tarde'
+            );
         }
     }
 
