@@ -18,7 +18,7 @@ class SaleController extends Controller
     public function index()
     {
         try {
-            $sales = Sale::paginate();
+            $sales = Sale::all();
             return new SaleResource($sales);
         } catch (Throwable $error) {
             return ResponseHelper::errorResponse(
@@ -58,8 +58,14 @@ class SaleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sale $sale)
+    public function show(string $id)
     {
+        try {
+            $sale = Sale::findOrFail($id);
+            return new SaleResource($sale);
+        } catch (Throwable $error) {
+            return ResponseHelper::errorResponse("Nenhuma venda encontrada", Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**
