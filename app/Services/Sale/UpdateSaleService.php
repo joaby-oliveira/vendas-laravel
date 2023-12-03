@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Salesman;
+namespace App\Services\Sale;
 
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;

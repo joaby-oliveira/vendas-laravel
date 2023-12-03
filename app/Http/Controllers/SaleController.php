@@ -7,11 +7,11 @@ use App\Http\Requests\Sale\UpdateSaleRequest;
 use App\Http\Resources\SaleResource;
 use App\Models\Sale;
 use App\Models\Salesman;
-use App\Services\Salesman\DestroySaleService;
-use App\Services\Salesman\ListSaleService;
-use App\Services\Salesman\ShowSaleService;
-use App\Services\Salesman\StoreSaleService;
-use App\Services\Salesman\UpdateSaleService;
+use App\Services\Sale\DestroySaleService;
+use App\Services\Sale\ListSaleService;
+use App\Services\Sale\ShowSaleService;
+use App\Services\Sale\StoreSaleService;
+use App\Services\Sale\UpdateSaleService;
 use Exception;
 use Illuminate\Http\Response;
 
@@ -22,30 +22,30 @@ class SaleController extends Controller
 {
     public function index()
     {
-        ListSaleService::execute();
+        return ListSaleService::execute();
     }
 
 
     public function store(StoreSaleRequest $request)
     {
         $data = $request->validated();
-        StoreSaleService::execute($data);
+        return StoreSaleService::execute($data);
     }
 
     public function show(string $id)
     {
-        ShowSaleService::execute($id);
+        return ShowSaleService::execute($id);
     }
 
     public function update(UpdateSaleRequest $request, string $id)
     {
         $data = $request->validated();
-        UpdateSaleService::execute($data, $id);
+        return UpdateSaleService::execute($data, $id);
     }
 
     public function destroy(string $id)
     {
         $sale = Sale::find($id);
-        DestroySaleService::execute($sale);
+        return DestroySaleService::execute($sale);
     }
 }

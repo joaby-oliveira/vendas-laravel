@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Salesman;
+namespace App\Services\Sale;
 
 use App\Models\Sale;
 use App\Utils\ResponseHelper;
