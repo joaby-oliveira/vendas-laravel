@@ -4,70 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Salesman\StoreSalesmanRequest;
 use App\Http\Requests\Salesman\UpdateSalesmanRequest;
-use App\Http\Resources\SalesmanResource;
-use App\Models\Salesman;
-use App\Utils\ResponseHelper;
-use Illuminate\Http\Response;
-use Throwable;
+use App\Services\Salesman\DestroySalesmanService;
+use App\Services\Salesman\ListSalesmanService;
+use App\Services\Salesman\ShowSalesmanService;
+use App\Services\Salesman\StoreSalesmanService;
+use App\Services\Salesman\UpdateSalesmanService;
 
 class SalesmanController extends Controller
 {
     public function index()
     {
-        try {
-            $salesmen = Salesman::all();
-            return SalesmanResource::collection($salesmen);
-        } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Não foi possível obter a lista de vendedores");
-        }
+        return ListSalesmanService::execute();
     }
 
     public function store(StoreSalesmanRequest $request)
     {
-        try {
-            $data = $request->validated();
-            $data['password'] = bcrypt($request->password);
-
-            $salesman = Salesman::create($data);
-
-            return new SalesmanResource($salesman);
-        } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Não foi possível criar o vendedor");
-        }
+        $data = $request->validated();
+        $data['password'] = bcrypt($request->password);
+        return StoreSalesmanService::execute($data);
     }
 
     public function show(string $id)
     {
-        try {
-            $salesman = Salesman::findOrFail($id);
-            return new SalesmanResource($salesman);
-        } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Nenhum vendedor encontrado", Response::HTTP_NOT_FOUND);
-        }
+        return ShowSalesmanService::execute($id);
     }
 
     public function update(UpdateSalesmanRequest $request, string $id)
     {
-        try {
-            $data = $request->validated();
-            $salesman = Salesman::findOrFail($id);
-            $salesman->update($data);
-
-            return new SalesmanResource($salesman);
-        } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Nenhum vendedor encontrado", Response::HTTP_NOT_FOUND);
-        }
+        $data = $request->validated();
+        return UpdateSalesmanService::execute($data, $id);
     }
 
     public function destroy(string $id)
     {
-        try {
-            $salesman = Salesman::findOrFail($id);
-            $salesman->delete();
-
-            return response()->json([], Response::HTTP_NO_CONTENT);
-        } catch (Throwable $error) {
-            return ResponseHelper::errorResponse("Informe um vendedor existente", Response::HTTP_NOT_FOUND);
-        }
+        return DestroySalesmanService::execute($id);
     }
 }
