@@ -25,6 +25,7 @@ class StoreSaleService
 
             return new SaleResource($sales);
         } catch (Throwable $error) {
+            dd($error);
             if ($error->getMessage() == 'Usuário inexistente') {
                 return ResponseHelper::errorResponse(
                     $error->getMessage(),

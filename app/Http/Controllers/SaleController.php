@@ -28,6 +28,7 @@ class SaleController extends Controller
 
     public function store(StoreSaleRequest $request)
     {
+
         $data = $request->validated();
         return StoreSaleService::execute($data);
     }
