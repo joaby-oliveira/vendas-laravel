@@ -25,7 +25,8 @@ class UpdateSaleRequest extends FormRequest
             'product_name' => 'required|string|max:255',
             'quantity' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0.01',
-            'salesman_id' => 'required'
+            'salesman_id' => 'required',
+            'commission' => 'nullable|numeric'
         ];
     }
 }

@@ -18,6 +18,7 @@ class Salesman extends Model
         'name',
         'email',
         'password',
+        'comission'
     ];
 
     public function sale()

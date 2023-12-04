@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('sale', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('product_name');
-            $table->integer('quantity');
             $table->decimal('price', 10, 2);
             $table->timestamps();
             $table->foreignUuid('salesman_id');
